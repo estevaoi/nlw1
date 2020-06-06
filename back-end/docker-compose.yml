@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  database:
+    image: mysql:5.7
+    container_name: ecoleta_database_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ecoletadb
+      MYSQL_DATABASE: ecoletadb
+      MYSQL_USER: ecoletadb
+      MYSQL_PASSWORD: ecoletadb
+    ports:
+      - "3335:3306"
+    networks:
+      - outside
+    expose:
+      - "3335"
+    restart: always
+    volumes:
+      - ./database:/var/lib/mysql
+  api:
+    build: .
+    container_name: ecoleta_api_node
+    # restart: always
+    volumes:
+      - ./:/usr/app/
+    command: >
+      sh -c "npm install &&
+      npm run knex:migrate &&
+      npm run knex:seed &&
+      npm run dev"
+    ports:
+      - "3334:3333"
+    networks:
+      - outside
+    depends_on:
+      - database
+networks:
+  outside:
+    external:
+      name: nginx_proxy_reverse

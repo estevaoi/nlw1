@@ -2,6 +2,7 @@ import Knex from 'knex';
 
 export async function up(knex: Knex) {
     return knex.schema.createTable('points', table => {
+        table.engine('InnoDB');
         table.increments('id').primary();
         table.string('image').notNullable();
         table.string('name').notNullable();
