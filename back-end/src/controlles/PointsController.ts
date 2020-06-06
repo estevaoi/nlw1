@@ -28,6 +28,10 @@ class PointsController {
             uf
         }
 
+        return res.json({
+            point
+        });
+
         const insertedIds = await trx('points').insert(point);
 
         const point_id = insertedIds[0];
@@ -54,7 +58,7 @@ class PointsController {
     }
 
     async index(req: Request, res: Response) {
-        const { city, uf, items } = req.query;
+        const { city, uf, items = false } = req.query;
 
         const parseItems = String(items)
             .split(',')
@@ -62,9 +66,23 @@ class PointsController {
 
         const points = await knex('points')
             .join('point_items', 'points.id', '=', 'point_items.point_id')
-            .whereIn('point_items.item_id', parseItems)
-            .where('city', String(city))
-            .where('uf', String(uf))
+            .where(function () {
+                if (String(parseItems) !== 'NaN') {
+                    this.whereIn('point_items.item_id', parseItems)
+                }
+            })
+            .where(function () {
+                if (city) {
+                    this.where('city', String(city))
+                }
+            })
+            .where(function () {
+                if (uf) {
+                    this.where('uf', String(uf))
+                }
+            })
+
+
             .distinct()
             .select('points.*')
 

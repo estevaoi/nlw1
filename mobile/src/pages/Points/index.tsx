@@ -61,6 +61,7 @@ const Points = () => {
     useEffect(() => {
         api.get('items').then(response => {
             setItems(response.data);
+            console.log(response.data);
         });
     }, []);
 
