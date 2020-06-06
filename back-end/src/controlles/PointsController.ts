@@ -28,10 +28,6 @@ class PointsController {
             uf
         }
 
-        return res.json({
-            point
-        });
-
         const insertedIds = await trx('points').insert(point);
 
         const point_id = insertedIds[0];
@@ -82,9 +78,8 @@ class PointsController {
                 }
             })
 
-
             .distinct()
-            .select('points.*')
+            .select('points.*');
 
         const serializedPoints = points.map(point => {
             return {
