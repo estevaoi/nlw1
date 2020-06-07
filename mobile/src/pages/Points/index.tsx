@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Constants from 'expo-constants';
 import { Feather as Icon } from '@expo/vector-icons'
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Alert } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Alert, SafeAreaView } from 'react-native'
 import MapView, { Marker } from 'react-native-maps';
 import { SvgUri } from 'react-native-svg';
 import * as Location from 'expo-location';
@@ -59,10 +59,16 @@ const Points = () => {
     }, []);
 
     useEffect(() => {
-        api.get('items').then(response => {
-            setItems(response.data);
-            console.log(response.data);
-        });
+
+        api.get('items')
+            .then(response => {
+                setItems(response.data);
+            })
+            .catch(function (err) {
+                console.log(err);
+            });;
+
+
     }, []);
 
     useEffect(() => {
@@ -77,11 +83,11 @@ const Points = () => {
         })
     }, [selectedItems]);
 
-    function handleNavigationBack() {
+    function handleNavigateBack() {
         navigation.goBack();
     }
 
-    function heandleNavigateToDetail(id: number) {
+    function handleNavigateToDetail(id: number) {
         navigation.navigate('Detail', { point_id: id });
     }
 
@@ -99,9 +105,9 @@ const Points = () => {
     }
 
     return (
-        <>
+        <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
-                <TouchableOpacity onPress={handleNavigationBack}>
+                <TouchableOpacity onPress={handleNavigateBack}>
                     <Icon name="arrow-left" size={20} color="#34cb79" />
                 </TouchableOpacity>
 
@@ -124,7 +130,7 @@ const Points = () => {
                                 <Marker
                                     key={String(point.id)}
                                     style={styles.mapMarker}
-                                    onPress={() => heandleNavigateToDetail(point.id)}
+                                    onPress={() => handleNavigateToDetail(point.id)}
                                     coordinate={{
                                         latitude: point.latitude,
                                         longitude: point.longitude
@@ -166,7 +172,7 @@ const Points = () => {
 
                 </ScrollView>
             </View>
-        </>
+        </SafeAreaView>
     );
 }
 

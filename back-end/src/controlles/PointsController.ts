@@ -84,7 +84,7 @@ class PointsController {
         const serializedPoints = points.map(point => {
             return {
                 ...point,
-                image_url: `https://api.ecoleta.org/uploads/points_images/${point.image}`
+                image_url: `http://api.ecoleta.org/uploads/points_images/${point.image}`
             }
         });
 
@@ -103,7 +103,7 @@ class PointsController {
 
         const serializedPoint = {
             ...point,
-            image_url: `https://api.ecoleta.org/uploads/points_images/${point.image}`
+            image_url: `http://api.ecoleta.org/uploads/points_images/${point.image}`
         };
 
 

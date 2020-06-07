@@ -10,7 +10,7 @@ class ItemsController {
             return {
                 id: item.id,
                 title: item.title,
-                image_url: `https://api.ecoleta.org/uploads/${item.image}`
+                image_url: `http://api.ecoleta.org/uploads/${item.image}`
             }
         });
 
